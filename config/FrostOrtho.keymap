@@ -6,7 +6,7 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <behaviors/runtime-sensor-rotate.dtsi>
 
-#define MOUSE 6
+#define MOUSE 4
 
 &mt {
     flavor = "balanced";
@@ -14,10 +14,60 @@
 };
 
 // AML クリックしたときにタイムアウトを延長
-&mkp_input_listener { input-processors = <&zip_temp_layer 6 10000>; };
+&mkp_input_listener { input-processors = <&zip_temp_layer MOUSE 10000>; };
 
 / {
-    combos { compatible = "zmk,combos"; };
+    combos {
+        compatible = "zmk,combos";
+
+        combo_rctrl {
+            timeout-ms = <50>;
+            key-positions = <17 18>;
+            bindings = <&kp RCTRL>;
+        };
+
+        combo_ralt {
+            timeout-ms = <50>;
+            key-positions = <16 17>;
+            bindings = <&kp RALT>;
+        };
+
+        combo_lctrl {
+            timeout-ms = <50>;
+            key-positions = <11 12>;
+            bindings = <&kp LCTRL>;
+        };
+
+        combo_lalt {
+            timeout-ms = <50>;
+            key-positions = <12 13>;
+            bindings = <&kp LALT>;
+        };
+
+        combo_tab {
+            timeout-ms = <50>;
+            key-positions = <1 2>;
+            bindings = <&kp TAB>;
+        };
+
+        combo_space {
+            timeout-ms = <50>;
+            key-positions = <27 28>;
+            bindings = <&kp SPACE>;
+        };
+
+        combo_gesture {
+            timeout-ms = <50>;
+            key-positions = <7 8>;
+            bindings = <&mo 13>;
+        };
+
+        combo_bootloader {
+            timeout-ms = <50>;
+            key-positions = <8 24 4>;
+            bindings = <&bootloader>;
+        };
+    };
 
     macros {
         to_layer_0: to_layer_0 {
@@ -76,89 +126,169 @@
     keymap {
         compatible = "zmk,keymap";
 
-        default_layer {
+        layer_0_base {
+            display-name = "base";
             bindings = <
-&kp Q                 &kp W         &kp E         &kp R             &kp T                         &kp Y        &kp U          &kp I      &kp O         &kp P
-&kp A                 &kp S         &kp D         &kp F             &kp G                         &kp H        &kp J          &kp K      &kp L         &lt 5 MINUS
-&mt LEFT_SHIFT Z      &kp X         &kp C         &kp V             &kp B                         &kp N        &kp M          &kp COMMA  &kp PERIOD    &lt 7 SLASH
-&mt LEFT_CONTROL TAB  &kp LEFT_WIN  &kp LEFT_ALT  &lt 7 LANG_HANJA  &lt 2 SPACE  &lt 3 LANG1      &lt 1 ENTER  &kp BACKSPACE  &trans     &lt 4 F10     &mt RIGHT_SHIFT INTERNATIONAL_1
+&kp Q            &kp W            &kp E            &kp R            &kp T                &kp Y            &kp U            &kp I            &kp O            &kp P
+&kp A            &kp S            &kp D            &kp F            &kp G                &kp H            &kp J            &kp K            &kp L            &mt RCTRL MINUS
+&mt LSHIFT Z     &kp X            &kp C            &kp V            &kp B                &kp N            &kp M            &kp COMMA        &kp DOT          &mt RSHIFT FSLH
+&lt 6 ESC        &kp LA(LS(F))    &kp LA(F)        &mt LGUI LANG2   &lt 1 SPACE      &lt 2 BSPC           &lt 3 ENTER      &mt RGUI LANG1   &none            &kp TAB          &mt RCTRL DEL
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
-        layer_1 {
+        layer_1_number {
+            display-name = "number";
             bindings = <
-&trans  &trans  &trans  &trans  &trans              &kp F1  &kp F2   &kp F3  &kp F4   &kp F5
-&trans  &trans  &trans  &trans  &trans              &kp F6  &kp F7   &kp F8  &kp F9   &kp F10
-&trans  &trans  &trans  &trans  &trans              &trans  &trans   &trans  &kp F11  &kp F12
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &kp DEL  &trans  &trans   &kp ESCAPE
+&kp F1     &kp F2     &kp F3     &kp F4     &trans         &trans     &kp N1     &kp N2     &kp N3     &trans
+&kp F5     &kp F6     &kp F7     &kp F8     &none          &kp PLUS   &kp N4     &kp N5     &kp N6     &kp MINUS
+&kp F9     &kp F10    &kp F11    &kp F12    &trans         &kp STAR   &kp N7     &kp N8     &kp N9     &kp FSLH
+&trans     &trans     &trans     &trans     &trans     &trans         &trans     &kp N0     &trans     &kp DOT    &kp COMMA
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
-        layer_2 {
+        layer_2_symbol {
+            display-name = "symbol";
             bindings = <
-&kp SLASH                   &kp N7     &kp N8  &kp N9  &kp LS(SQT)                    &kp LS(NUMBER_3)  &kp LS(NUMBER_4)  &kp LS(NUMBER_5)      &kp LS(NUMBER_6)   &kp LEFT_BRACKET
-&kp MINUS                   &kp N4     &kp N5  &kp N6  &kp LS(SEMICOLON)              &kp LS(N2)        &kp LS(N7)        &kp LS(LEFT_BRACKET)  &kp LS(NUMBER_8)   &kp LS(NUMBER_9)
-&mt LEFT_SHIFT N0           &kp N1     &kp N2  &kp N3  &kp PERIOD                     &kp SEMICOLON     &kp SQT           &kp LS(INT_YEN)       &kp RIGHT_BRACKET  &kp BACKSLASH
-&mt LEFT_CONTROL LS(MINUS)  &kp ENTER  &trans  &trans  &trans             &trans      &trans            &trans            &trans                &kp LS(NUMBER_1)   &kp EQUAL
+&kp EXCL   &kp AT     &kp HASH   &kp DLLR   &kp PRCNT      &kp CARET  &kp AMPS   &kp STAR   &kp TILDE  &kp GRAVE
+&kp EQUAL  &kp LT     &kp LBKT   &kp LBRC   &kp LPAR       &kp RPAR   &kp RBRC   &kp RBKT   &kp GT     &kp PLUS
+&kp UNDER  &kp PIPE   &kp SEMI   &kp COLON  &kp BSLH       &kp DQT    &kp SQT    &kp MINUS  &trans     &trans
+&kp ESC    &trans     &trans     &trans     &trans     &trans         &none      &trans     &trans     &trans     &trans
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
-        layer_3 {
+        layer_3_move {
+            display-name = "move";
             bindings = <
-&kp ESCAPE      &trans          &kp UP_ARROW    &trans           &trans              &trans  &trans  &trans  &trans  &trans
-&kp HOME        &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &kp END             &trans  &trans  &trans  &trans  &trans
-&kp LEFT_SHIFT  &trans          &trans          &trans           &trans              &trans  &trans  &trans  &trans  &trans
-&trans          &trans          &trans          &trans           &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&kp HOME           &kp LS(LC(TAB))    &kp PG_UP          &kp LC(TAB)        &kp END                &kp LA(N1)         &kp LA(N2)         &kp LA(N3)         &kp LA(N4)         &kp LA(N5)
+&kp C_MUTE         &kp C_VOL_DN       &kp C_VOL_UP       &kp C_BRI_DN       &kp C_BRI_UP           &kp LEFT           &kp DOWN           &kp UP             &kp RIGHT          &kp LA(N0)
+&kp LSHIFT         &trans             &kp PG_DN          &trans             &trans                 &kp LA(LS(LC(H)))  &kp LA(LS(LC(J)))  &kp LA(LS(LC(K)))  &kp LA(LS(LC(L)))  &kp LA(LS(B))
+&trans             &trans             &trans             &trans             &trans             &trans                 &trans             &trans             &trans             &trans             &kp LG(LS(N4))
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
-        layer_4 {
+        layer_4_mouse {
+            display-name = "mouse";
             bindings = <
-&trans  &trans  &trans  &trans  &trans              &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-&trans  &trans  &trans  &trans  &trans              &trans          &trans        &trans        &trans        &trans
-&trans  &trans  &trans  &trans  &trans              &studio_unlock  &trans        &trans        &trans        &bt BT_CLR
-&trans  &trans  &trans  &trans  &trans  &trans      &trans          &trans        &trans        &trans        &bt BT_CLR_ALL
+&trans    &trans    &trans    &trans    &trans        &trans    &trans    &trans    &trans    &trans
+&trans    &trans    &trans    &trans    &trans        &trans    &mkp MB1  &mkp MB3  &mkp MB2  &mo 5
+&trans    &trans    &trans    &trans    &trans        &trans    &trans    &trans    &trans    &trans
+&trans    &trans    &trans    &trans    &trans    &trans        &trans    &trans    &trans    &trans    &trans
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
-        layer_5 {
+        layer_5_scroll {
+            display-name = "scroll";
             bindings = <
-&trans  &trans  &trans  &trans  &trans              &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans              &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans              &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
-        MOUSE {
+        layer_6_setting {
+            display-name = "setting";
             bindings = <
-&trans  &trans  &trans  &trans  &trans              &trans  &mkp MB1  &mkp MB2  &mkp MB3  &trans
-&trans  &trans  &trans  &trans  &trans              &trans  &trans    &trans    &trans    &trans
-&trans  &trans  &trans  &trans  &trans              &trans  &trans    &trans    &trans    &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans    &trans    &trans    &trans
+&kp LG(LC(Q))   &trans          &trans          &trans          &trans              &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3    &trans
+&trans          &trans          &trans          &trans          &trans              &none           &trans          &trans          &tog 12         &trans
+&trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+&trans          &trans          &trans          &trans          &trans          &trans              &trans          &bootloader     &trans          &bt BT_CLR      &bt BT_CLR_ALL
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
-        layer_7 {
+        layer_7_layer_7 {
+            display-name = "Layer 7";
             bindings = <
-&kp LC(Z)  &kp LC(Y)    &trans       &trans       &trans              &trans  &trans  &trans  &trans  &trans
-&trans     &trans       &trans       &trans       &trans              &trans  &trans  &trans  &trans  &trans
-&trans     &screenshot  &kp LC(INS)  &kp LS(INS)  &trans              &trans  &trans  &trans  &trans  &trans
-&trans     &trans       &trans       &trans       &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_vol &rsr_trans>;
+        };
+
+        layer_8_layer_8 {
+            display-name = "Layer 8";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_vol &rsr_trans>;
+        };
+
+        layer_9_layer_9 {
+            display-name = "Layer 9";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_vol &rsr_trans>;
+        };
+
+        layer_10_layer_10 {
+            display-name = "Layer 10";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_vol &rsr_trans>;
+        };
+
+        layer_11_layer_11 {
+            display-name = "Layer 11";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_vol &rsr_trans>;
+        };
+
+        layer_12_precision {
+            display-name = "Precision";
+            bindings = <
+&none     &none     &none     &none     &none         &none     &none     &none     &none     &none
+&none     &none     &none     &none     &none         &none     &none     &mkp MB1  &mkp MB2  &mkp MB3
+&none     &none     &none     &none     &none         &none     &none     &none     &none     &none
+&none     &none     &none     &none     &none     &none         &none     &none     &trans    &none     &tog 12
+            >;
+
+            sensor-bindings = <&rsr_vol &rsr_trans>;
+        };
+
+        layer_13_gesture {
+            display-name = "Gesture";
+            bindings = <
+&none          &none          &none          &none          &none              &none          &none          &kp LC(DOWN)   &none          &none
+&none          &none          &none          &none          &none              &none          &kp LC(RIGHT)  &none          &kp LC(LEFT)   &none
+&none          &none          &none          &none          &none              &none          &none          &kp LC(UP)     &none          &none
+&none          &none          &none          &none          &none          &none              &none          &none          &trans         &none          &none
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
