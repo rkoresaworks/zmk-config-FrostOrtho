@@ -141,7 +141,7 @@
 &kp Q            &kp W            &kp E            &kp R            &kp T                &kp Y            &kp U            &kp I            &kp O            &kp P
 &kp A            &kp S            &kp D            &kp F            &kp G                &kp H            &kp J            &kp K            &kp L            &mt RCTRL MINUS
 &mt LSHIFT Z     &kp X            &kp C            &kp V            &kp B                &kp N            &kp M            &kp COMMA        &kp DOT          &mt RSHIFT FSLH
-&lt 6 ESC        &kp LA(LS(F))    &kp LA(F)        &mt LGUI LANG2   &lt 1 SPACE      &lt_qt 2 BSPC        &lt 3 ENTER      &mt RGUI LANG1   &none            &kp TAB          &mt RCTRL DEL
+&lt 6 ESC        &kp LA(LS(F))    &kp LA(F)        &mt LGUI LANG2   &lt 1 SPACE      &lt_qt 2 BSPC        &lt 3 ENTER      &mt RGUI LANG1   &kp SPACE        &kp TAB          &mt RCTRL DEL
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
