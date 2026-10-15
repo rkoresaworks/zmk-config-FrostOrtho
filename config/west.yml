@@ -10,6 +10,8 @@ manifest:
       url-base: https://github.com/cormoran
     - name: imo00o
       url-base: https://github.com/imo00o
+    - name: rkoresaworks
+      url-base: https://github.com/rkoresaworks
   projects:
     #　- name: zmk
     #   remote: zmkfirmware
@@ -22,8 +24,8 @@ manifest:
       remote: sekigon-gonnoc
       revision: main
     - name: zmk-rgbled-widget
-      remote: caksoylar
-      revision: v0.3.0
+      remote: rkoresaworks # BLEプロファイル別の色・接続待ち点滅を追加したfork
+      revision: v0.3-conn-indicator
     # DYA Studio モジュール
     - name: zmk-module-ble-management
       remote: cormoran
