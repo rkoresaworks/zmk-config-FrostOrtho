@@ -1,0 +1,1 @@
+target_sources_ifdef(CONFIG_FROSTORTHO_WIN_LAYER_AUTO app PRIVATE src/win_layer_auto.c)
