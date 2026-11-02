@@ -7,6 +7,7 @@
 #include <behaviors/runtime-sensor-rotate.dtsi>
 
 #define MOUSE 4
+#define WIN 8 // Kconfig の FROSTORTHO_WIN_LAYER と揃える
 
 &mt {
     flavor = "balanced";
@@ -23,6 +24,7 @@
         combo_rctrl {
             timeout-ms = <50>;
             key-positions = <17 18>;
+            layers = <0 1 2 3 4 5 6 7 12 13>; // Macのみ
             bindings = <&kp RCTRL>;
         };
 
@@ -35,6 +37,7 @@
         combo_lctrl {
             timeout-ms = <50>;
             key-positions = <11 12>;
+            layers = <0 1 2 3 4 5 6 7 12 13>; // Macのみ
             bindings = <&kp LCTRL>;
         };
 
@@ -42,6 +45,21 @@
             timeout-ms = <50>;
             key-positions = <12 13>;
             bindings = <&kp LALT>;
+        };
+
+        // Windows: CmdをCtrlに入れ替えたぶん、Mac側のCtrlコンボはWinキーにする
+        combo_win_rgui {
+            timeout-ms = <50>;
+            key-positions = <17 18>;
+            layers = <8 9 10 11 14 15 16 17>;
+            bindings = <&kp RGUI>;
+        };
+
+        combo_win_lgui {
+            timeout-ms = <50>;
+            key-positions = <11 12>;
+            layers = <8 9 10 11 14 15 16 17>;
+            bindings = <&kp LGUI>;
         };
 
         combo_tab {
@@ -66,6 +84,40 @@
             timeout-ms = <50>;
             key-positions = <8 24 4>;
             bindings = <&bootloader>;
+        };
+    };
+
+    // WIN(レイヤー8)有効中は、各レイヤーのWindows差分を自動で重ねる
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+
+        win_number {
+            if-layers = <1 WIN>;
+            then-layer = <9>;
+        };
+        win_symbol {
+            if-layers = <2 WIN>;
+            then-layer = <10>;
+        };
+        win_move {
+            if-layers = <3 WIN>;
+            then-layer = <11>;
+        };
+        win_setting {
+            if-layers = <6 WIN>;
+            then-layer = <14>;
+        };
+        win_gesture {
+            if-layers = <13 WIN>;
+            then-layer = <15>;
+        };
+        win_mouse {
+            if-layers = <MOUSE WIN>;
+            then-layer = <16>;
+        };
+        win_scroll {
+            if-layers = <5 WIN>;
+            then-layer = <17>;
         };
     };
 
@@ -143,6 +195,21 @@
             tap-ms = <20>;
             cw-binding = <&msc SCRL_RIGHT>;
             ccw-binding = <&msc SCRL_LEFT>;
+        };
+        // Windows用: Macのナチュラルスクロールと同じ向きになるよう逆転
+        rsr_scroll_win: rsr_scroll_win {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <20>;
+            cw-binding = <&msc SCRL_UP>;
+            ccw-binding = <&msc SCRL_DOWN>;
+        };
+        rsr_hscroll_win: rsr_hscroll_win {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <20>;
+            cw-binding = <&msc SCRL_LEFT>;
+            ccw-binding = <&msc SCRL_RIGHT>;
         };
     };
 
@@ -245,52 +312,52 @@
             sensor-bindings = <&rsr_scroll &rsr_trans>;
         };
 
-        layer_8_layer_8 {
-            display-name = "Layer 8";
+        layer_8_win_base {
+            display-name = "win base";
             bindings = <
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &mt RGUI MINUS
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &kp LG(DOWN)       &kp LG(UP)         &mt LCTRL INT5     &trans             &trans             &trans             &mt RCTRL INT4     &trans             &trans             &mt RGUI DEL
             >;
 
-            sensor-bindings = <&rsr_scroll &rsr_trans>;
+            sensor-bindings = <&rsr_scroll_win &rsr_trans>;
         };
 
-        layer_9_layer_9 {
-            display-name = "Layer 9";
+        layer_9_win_number {
+            display-name = "win number";
             bindings = <
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &kp LS(SEMI)       &trans             &trans             &trans             &kp MINUS
+&trans             &trans             &trans             &trans             &trans             &kp LS(SQT)        &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &kp N0             &trans             &trans             &kp COMMA
             >;
 
-            sensor-bindings = <&rsr_scroll &rsr_trans>;
+            sensor-bindings = <&rsr_scroll_win &rsr_trans>;
         };
 
-        layer_10_layer_10 {
-            display-name = "Layer 10";
+        layer_10_win_symbol {
+            display-name = "win symbol";
             bindings = <
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans             &kp LBKT           &trans             &trans             &trans             &kp EQUAL          &kp LS(N6)         &kp LS(SQT)        &kp LS(EQUAL)      &kp LS(LBKT)
+&kp LS(MINUS)      &trans             &kp RBKT           &kp LS(RBKT)       &kp LS(N8)         &kp LS(N9)         &kp LS(NUHS)       &kp NUHS           &trans             &kp LS(SEMI)
+&kp LS(INT1)       &kp LS(INT3)       &trans             &kp SQT            &kp INT1           &kp LS(N2)         &kp LS(N7)         &kp MINUS          &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
             >;
 
-            sensor-bindings = <&rsr_scroll &rsr_trans>;
+            sensor-bindings = <&rsr_scroll_win &rsr_trans>;
         };
 
-        layer_11_layer_11 {
-            display-name = "Layer 11";
+        layer_11_win_move {
+            display-name = "win move";
             bindings = <
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans
+&trans             &trans             &trans             &trans             &trans             &kp LG(N1)         &kp LG(N2)         &kp LG(N3)         &kp LG(N4)         &kp LG(N5)
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &kp LG(D)
+&trans             &trans             &trans             &trans             &trans             &kp LG(LEFT)       &kp LG(DOWN)       &kp LG(UP)         &kp LG(RIGHT)      &kp LG(Z)
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &kp LG(LS(S))
             >;
 
-            sensor-bindings = <&rsr_scroll &rsr_trans>;
+            sensor-bindings = <&rsr_hscroll_win &rsr_trans>;
         };
 
         layer_12_precision {
@@ -315,6 +382,54 @@
             >;
 
             sensor-bindings = <&rsr_scroll &rsr_trans>;
+        };
+
+        layer_14_win_setting {
+            display-name = "win setting";
+            bindings = <
+&kp LG(L)          &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &bootloader        &trans             &trans             &bt BT_CLR_ALL
+            >;
+
+            sensor-bindings = <&rsr_scroll_win &rsr_trans>;
+        };
+
+        layer_15_win_gesture {
+            display-name = "win gesture";
+            bindings = <
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &kp LA(LC(TAB))    &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &kp LG(LC(RIGHT))  &trans             &kp LG(LC(LEFT))   &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &kp LG(TAB)        &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+            >;
+
+            sensor-bindings = <&rsr_scroll_win &rsr_trans>;
+        };
+
+        layer_16_win_mouse {
+            display-name = "win mouse";
+            bindings = <
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+            >;
+
+            sensor-bindings = <&rsr_scroll_win &rsr_trans>;
+        };
+
+        layer_17_win_scroll {
+            display-name = "win scroll";
+            bindings = <
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+&trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans             &trans
+            >;
+
+            sensor-bindings = <&rsr_scroll_win &rsr_trans>;
         };
     };
 };

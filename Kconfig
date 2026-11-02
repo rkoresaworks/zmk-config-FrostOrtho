@@ -1,0 +1,15 @@
+config FROSTORTHO_WIN_LAYER_AUTO
+    bool "Activate the Windows layer based on the active BLE profile"
+    depends on ZMK_BLE && ZMK_SPLIT_ROLE_CENTRAL
+
+if FROSTORTHO_WIN_LAYER_AUTO
+
+config FROSTORTHO_WIN_LAYER
+    int "Windows overlay layer"
+    default 8
+
+config FROSTORTHO_WIN_BT_PROFILE
+    int "BLE profile index connected to Windows"
+    default 1
+
+endif

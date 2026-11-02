@@ -75,6 +75,16 @@
         input-processors = <&zip_xy_scaler 1 3>; // カーソル移動量1/3倍
         process-next; // 通常の移動量・方向調整も続けて適用
     };
+    // Windows: Macのナチュラルスクロールと同じ向きになるよう逆転
+    scroller_y_win {
+        layers = <17>; // win scroll(5とWIN同時有効で自動ON)
+        input-processors = <
+            &zip_xy_to_scroll_mapper
+            &zip_scroll_x_scaler 0 3 // X軸スクロール量0/3倍
+            &zip_scroll_y_scaler 2 3 // Y軸スクロール量2/3倍
+            &zip_scroll_transform (INPUT_TRANSFORM_Y_INVERT) // スクロール方向調整
+        >;
+    };
     scroller_y {
         layers = <5>; // 縦スクロールレイヤー
         input-processors = <
